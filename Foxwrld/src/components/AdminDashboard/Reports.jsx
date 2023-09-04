@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import coats from "../../assets/coats.jpeg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,6 +14,7 @@ export default function Reports() {
   const [loading,setLoading] = useState(false);
 
   const [startDate, setStartDate] = useState(null);
+  const [allUser, setAllUser] = useState([]);
   const [endDate, setEndDate] = useState(null);
   const [getMaxProduct, setMaxProduct] = useState(null);
   const [amount, setAmount] = useState([]);
@@ -22,12 +23,27 @@ export default function Reports() {
   const [ordersCount,setOrdersCount] = useState(null);
   const [mostFrequentProduct, setMostFrequentProduct] = useState(null);
 
-  const {token,setToken,setUser} = useStateContext();
+  const {token,setToken,setUser,user} = useStateContext();
   
   
   if(!token){
     return <Navigate to="/Login"/>
   }
+  
+  if (user.admin == null) {
+    return <Navigate to="/"/>
+  }
+
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+
+  useEffect(() => {
+    userData()
+  }, []);
   
   const logOut = (ev) => {
     ev.preventDefault();
@@ -75,6 +91,13 @@ export default function Reports() {
     axiosClient.get('/visitor')
     .then(({data}) => {
       setVisitor(data.views)
+    })
+  },[])
+
+  useEffect(() => {
+    axiosClient.get('/users')
+    .then(({data}) => {
+      setAllUser(data)
     })
   },[])
 
@@ -276,7 +299,7 @@ export default function Reports() {
     <div className="mb-4">
       <div className="border border-slate-300 bg-white rounded p-6 text-center">
         <strong className="text-sm fontBold">Registered Users</strong><p className="fontThin">The total count of users who have created accounts on your website indicates the size of your customer base and the potential for targeted marketing.</p>
-        <div className="mt-4">{visitor}</div>
+        <div className="mt-4">{allUser && allUser.length }</div>
       </div>
     </div>
     <div className="mb-4">
@@ -284,25 +307,6 @@ export default function Reports() {
         <strong className="text-sm fontBold">Returning Customers</strong><p className="fontThin">The number of customers who made repeat purchases indicates customer loyalty and retention.</p>
         <div className="mt-4">{ordersCount && ordersCount }</div>
       </div>
-    </div>
-    <div className="mb-4">
-      <div className="border border-slate-300 bg-white rounded p-4">
-        <strong>Date Range:</strong>
-        <DatePicker
-          selected={startDate}
-          onChange={handleDateChange}
-          startDate={startDate}
-          endDate={endDate}
-          selectsRange
-          inline
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Submit
-      </button>
     </div>
   </div>
   </form>

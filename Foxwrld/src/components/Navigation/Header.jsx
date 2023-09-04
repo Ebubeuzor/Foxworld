@@ -22,9 +22,9 @@ export default function Header({ color, cartCount }) {
     })
   },[])
 
-  if(!token){
-    return <Navigate to="/Login"/>
-  }
+  // if(!token){
+  //   return <Navigate to="/Login"/>
+  // }
   
   const userData = () => {
     axiosClient.get('/user')
@@ -281,7 +281,7 @@ const logOut = (ev) => {
           </header>
         <ul className="flex whitespace-nowrap h-full relative items-center space-x-3">
           <li>
-          <Link to="/Account">
+          {token && <Link to="/Account">
           <button className="px-4 sm:px-8 py-6">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -299,15 +299,20 @@ const logOut = (ev) => {
             </svg>
 
             </button>
-          </Link>
+          </Link>}
           </li>
           <li>
-  <Link onClick={logOut}>
-    <button className={`text-${color}`}>
-      Logout
-    </button>
-  </Link>
-</li>
+            {token && <Link onClick={logOut}>
+              <button className={`text-${color}`}>
+                Logout
+              </button>
+            </Link>}
+            {!token && <Link to={"/Login"}>
+              <button className={`text-${color}`}>
+                SIGN IN
+              </button>
+            </Link>}
+          </li>
 
 
           {user.admin === "Admin" &&

@@ -141,7 +141,7 @@ export default function SignUp() {
             </div>
         </form>
             {loginUrl != null && (
-              <button type="button" className="flex justify-center border-2 border-black my-4 py-2 items-center">
+              <button type="button" className="flex justify-center border-2 border-black my-4 py-2 px-2 items-center">
                 <span>
                   <img src={googleLogo} className="w-6 " alt="" />
                 </span>
@@ -151,7 +151,7 @@ export default function SignUp() {
                 </span>
               </button>
             )}
-            <button className="flex justify-center border-2 border-black my-4 py-2 items-center">
+            {/* <button className="flex justify-center border-2 border-black my-4 py-2 items-center">
               <span>
                 <img src={appleLogo} className="w-6 " alt="" />
               </span>
@@ -159,7 +159,7 @@ export default function SignUp() {
               <span className="uppercase text-sm fontBold">
                 continue with apple
               </span>
-            </button>
+            </button> */}
             <Link
               to="/"
               className="text-black hover:text-blue-700 block fontBold"

@@ -32,8 +32,8 @@ return [
     ],
 
     'google' => [
-        'client_id' => '411039194614-qpv6qabegkc12a3vv10utda1hfbpt29r.apps.googleusercontent.com',
-        'client_secret' => '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',
+        'client_id' => '708003345564-alr7ub5l7mibaj251unfko86n9o0pitk.apps.googleusercontent.com',
+        'client_secret' => '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',
         'redirect' => 'http://127.0.0.1:5173/auth/google',
     ],
 

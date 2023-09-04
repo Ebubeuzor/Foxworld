@@ -21,10 +21,14 @@ export default function Order() {
   const [orderDate, setOrderDate] = useState("");
 
   
-  const {token,setToken,setUser} = useStateContext();
+  const {token,setToken,setUser,user} = useStateContext();
   
   if(!token){
     return <Navigate to="/Login"/>
+  }
+  
+  if (user.admin == null) {
+    return <Navigate to="/"/>
   }
   
   const logOut = (ev) => {
@@ -63,6 +67,16 @@ export default function Order() {
   }
 
   
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+
+  useEffect(() => {
+    userData()
+  }, []);
 
   useEffect(() => {
     getMenu()
@@ -206,9 +220,17 @@ export default function Order() {
             </div>
             <div>
             <span className="text-sm">All Products({meta.total})</span>
-              <span className="ml-4 text-sm">Men ({orders.filter(order => order.order.product_id.gender === 'male').length})</span>
-              <span className="ml-4 text-sm">Women ({orders.filter(order => order.order.product_id.gender === 'female').length})</span>
-              <span className="ml-4 text-sm">Children ({orders.filter(order => order.order.product_id.gender === 'children').length})</span>
+
+              <span className="ml-4 text-sm">
+                Men ({orders.filter(order => order.order && order.order.product_id && order.order.product_id.gender === 'male').length})
+              </span>
+              <span className="ml-4 text-sm">
+                Women ({orders.filter(order => order.order && order.order.product_id && order.order.product_id.gender === 'female').length})
+              </span>
+              <span className="ml-4 text-sm">
+                Children ({orders.filter(order => order.order && order.order.product_id && order.order.product_id.gender === 'children').length})
+              </span>
+
             </div>
           </header>
           <form method="post" onSubmit={checkForData}>
@@ -348,7 +370,7 @@ export default function Order() {
                 
                     <td className="text-center p-4">#{order.transaction}</td>
                     <td className="text-center p-4">
-                      <Link to="/">{order.order.product_id.title}</Link>
+                      <Link to="/">{ order.order && order.order.product_id.title}</Link>
                       <div className="hover:visible">
                         <Link to="/" className="text-red-500 hover:underline">
                           Delete
@@ -361,7 +383,7 @@ export default function Order() {
                     <td className="text-center p-4">{order.date}</td>
                     <td className="text-center p-4">{order.orderStatus}</td>
                     <td className="text-center p-4 "><span className="bg-gray-400 p-2 rounded-md">{order.paymentStatus} payment</span></td>
-                    <td className="text-center p-4">{order.order.product_id.salePrice}</td>
+                    <td className="text-center p-4">{ order.order && order.order.product_id.salePrice}</td>
                     <td className="text-center p-4">1</td>
               
                   </tr>

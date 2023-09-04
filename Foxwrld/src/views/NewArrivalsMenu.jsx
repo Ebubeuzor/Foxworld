@@ -19,6 +19,11 @@ import SkeletonLoader from "../components/SkeletonLoader";
 
 export default function NewArrivalsMenu() {
   
+
+  const handleFilteredData = (filteredData) => {
+    setProducts(filteredData);
+    
+  }
   const [meta,setMeta] = useState({});
   const [products,setProducts] = useState([]);
   
@@ -26,8 +31,8 @@ export default function NewArrivalsMenu() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const menu = queryParams.get('menu');
-  const submenu = queryParams.get('submenu');
-  const item = queryParams.get('item');
+  const submenu = encodeURIComponent(queryParams.get('submenu')); 
+  const item = encodeURIComponent(queryParams.get('item'));
   const getProduct = (url) => {
     setLoading(true)
     url = url || `/selectProducts?menu=${menu}&submenu=${submenu}&item=${item}`
@@ -64,7 +69,7 @@ export default function NewArrivalsMenu() {
           </div>
           <div>
             <div className="hidden md:block">
-              <AccordionMenu />
+              <AccordionMenu  onFilteredData={handleFilteredData}  />
             </div>
             <MobileFilterModalMenu />
 

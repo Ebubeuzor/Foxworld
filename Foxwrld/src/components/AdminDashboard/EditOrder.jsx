@@ -7,7 +7,7 @@ import { useStateContext } from "../../context/ContextProvider";
 
 export default function Layout() {
   const [loading,setLoading] = useState(false);
-  const {notification,setNotification,token,setToken,setUser} = useStateContext();
+  const {notification,setNotification,token,setToken,setUser,user} = useStateContext();
   const [status, setStatus] = useState("Processing");
   const [selectAll, setSelectAll] = useState(false);
   const [data, setData] = useState(null);
@@ -17,6 +17,11 @@ export default function Layout() {
   
   if(!token){
     return <Navigate to="/Login"/>
+  }
+
+  
+  if (user.admin == null) {
+    return <Navigate to="/"/>
   }
   
   const logOut = (ev) => {
@@ -57,6 +62,18 @@ export default function Layout() {
       setCategories(categories.filter((category) => category !== value));
     }
   };
+
+  
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+
+  useEffect(() => {
+    userData()
+  }, []);
 
   const updateStuff = (ev) => {
     ev.preventDefault();

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Button from "../Button";
 import axiosClient from "../../axoisClient";
 import { useStateContext } from "../../context/ContextProvider";
 
 export default function MenuEditor() {
-  const {notification,setNotification,token,setToken,setUser} = useStateContext();
+  const {notification,setNotification,token,setToken,setUser,user} = useStateContext();
   const [activeDropdown1, setActiveDropdown1] = useState(false);
   const [activeDropdown2, setActiveDropdown2] = useState(false);
   const [showDeleteModal1, setShowDeleteModal1] = useState(false);
@@ -27,6 +27,22 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
   if(!token){
     return <Navigate to="/Login"/>
   }
+
+  
+  if (user.admin == null) {
+    return <Navigate to="/"/>
+  }
+
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+
+  useEffect(() => {
+    userData()
+  }, []);
 
   const logOut = (ev) => {
     ev.preventDefault();

@@ -19,6 +19,7 @@ export default function Homepage() {
   useEffect(() => {
     axiosClient.get('/homepage')
     .then(({data}) => {
+      console.log(data);
       data.data.map((d) => (
         setHomepageData(d)
       ))

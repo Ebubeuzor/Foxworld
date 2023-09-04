@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('google_id')->nullable();
             $table->string('city')->nullable();
             $table->string('address1')->nullable();
+            $table->string('admin')->nullable();
             $table->string('address2')->nullable();
             $table->string('phoneno')->nullable();
             $table->string('zipcode')->nullable();

@@ -3,16 +3,17 @@ import Header from "../components/Navigation/Header";
 import Hamburger from "../components/Navigation/Hamburger";
 import googleLogo from "../assets/googleLogo.png";
 import appleLogo from "../assets/appleLogo.png";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useStateContext } from "../context/ContextProvider";
 import axiosClient from "../axoisClient";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const {token,setToken,setUser} = useStateContext();
   const [loginUrl, setLoginUrl] = useState(null);
-
+  const navigate = useNavigate();
   if(token){
-    return <Navigate to={"/"}/>
+    return navigate("/")
   }
 
   const emailRef = useRef();
@@ -20,41 +21,83 @@ export default function Login() {
 
   const [error, setError] = useState({__html: ""});
 
+  // const onSubmit = (ev) => {
+  //   ev.preventDefault();
+
+  //   const payload = {
+  //     email: emailRef.current.value,
+  //     password: passwordRef.current.value,
+  //   }
+
+  //   axiosClient.post('/login',payload)
+  //   .then(({data}) => {
+  //     setUser(data.user)
+  //     setToken(data.token)
+  //   })
+  //   .catch((error) => {
+      
+  //     if (error.response && error.response.status === 422) {
+  //       if (error.response.data.errors) {
+
+  //         const finalError = Object.values(error.response.data.errors).reduce((accum,next) => [
+  //           ...accum, ...next
+  //         ], [])
+  //         setError({__html: finalError.join("<br/>")});
+          
+  //       } else {
+  //         const finalError = Object.values(error.response.data.message).reduce((accum,next) => [
+  //           ...accum, ...next
+  //         ], [])
+  //         setError({__html: finalError.join("")});
+  //       }
+  //     }
+
+  //   })
+  // }
+
+
   const onSubmit = (ev) => {
     ev.preventDefault();
-
+  
     const payload = {
       email: emailRef.current.value,
       password: passwordRef.current.value,
     }
-
-    axiosClient.post('/login',payload)
-    .then(({data}) => {
-      setUser(data.user)
-      setToken(data.token)
-      location.reload();
-    })
-    .catch((error) => {
-      
-      if (error.response && error.response.status === 422) {
-        if (error.response.data.errors) {
-
-          const finalError = Object.values(error.response.data.errors).reduce((accum,next) => [
-            ...accum, ...next
-          ], [])
-          setError({__html: finalError.join("<br/>")});
-          
+  
+    axiosClient.post('/login', payload)
+      .then(({ data }) => {
+        setUser(data.user);
+        setToken(data.token);
+  
+        // Check if there's a previous URL stored in the cookie
+        const redirectPath = Cookies.get("redirectPath");
+  
+        // If there's a previous URL, navigate to it and remove the cookie
+        if (redirectPath) {
+          navigate(redirectPath);
+          Cookies.remove("redirectPath");
         } else {
-          const finalError = Object.values(error.response.data.message).reduce((accum,next) => [
-            ...accum, ...next
-          ], [])
-          setError({__html: finalError.join("")});
+          // If there's no previous URL, navigate to the root page or any other desired page
+          navigate('/');
         }
-      }
-
-    })
+      })
+      .catch((error) => {
+        // Handle login errors here
+        if (error.response && error.response.status === 422) {
+          if (error.response.data.errors) {
+            const finalError = Object.values(error.response.data.errors).reduce((accum, next) => [
+              ...accum, ...next
+            ], []);
+            setError({ __html: finalError.join("<br/>") });
+          } else {
+            const finalError = Object.values(error.response.data.message).reduce((accum, next) => [
+              ...accum, ...next
+            ], []);
+            setError({ __html: finalError.join("") });
+          }
+        }
+      });
   }
-
   
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/auth', {

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+
 import Header from "../Navigation/Header";
 import pyjamas from "../../assets/pjamas1.jpeg";
 import jacket from "../../assets/jacket1.jpeg";
 import jacke2 from "../../assets/jacket2.jpeg";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
+
 
 import axiosClient from "../../axoisClient";
 import { useStateContext } from "../../context/ContextProvider";
@@ -13,11 +17,22 @@ import SkeletonProductDetails from "../SkeletonProductDetails";
 export default function ProductDetails({ updateCartCount,product }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
-  const {setNotification,notification,inCart,setIncart } = useStateContext();
+  const {setNotification,notification,inCart,setIncart,token,setUser,user } = useStateContext();
+  const navigate = useNavigate();
 
 
   const {id} = useParams();
   
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+
+  useEffect(() => {
+    userData()
+  }, []);
   
   useEffect(() => {
     axiosClient.get(`/products/${id}`)
@@ -34,8 +49,13 @@ export default function ProductDetails({ updateCartCount,product }) {
   };
 
   const handleAddToCart = () => {
-    updateCartCount((prevCount) => prevCount + 1);
+    
+      
+      updateCartCount((prevCount) => prevCount + 1);
+    // 
   };
+
+  
 
   const handleSizeSelect = (size) => {
     setSelectedSize(size);
@@ -55,25 +75,41 @@ export default function ProductDetails({ updateCartCount,product }) {
     );
   };
 
-  const addToCart = (e) => {
-    e.preventDefault();
-  
-    const newCartItem = {
-      product_id: product.id,
-      size: selectedSize
-    };
-  
-    axiosClient.post('/order', newCartItem)
-    .then(({data}) => {
-        axiosClient.get('/userCart')
-        .then(({data}) => {
-          setIncart(data.data)
-          setNotification("Product has been sucessfully added")
-        }).catch((e) => {
-          console.log(e);
-        })
-    }).catch((error) => console.log(error))
+ const addToCart = (e) => {
+  e.preventDefault();
+
+  // Check if a size has been selected
+  if (!selectedSize) {
+    setNotification("Please select a size before adding to the cart");
+    return; // Do not proceed further
+  }
+
+  const newCartItem = {
+    product_id: product.id,
+    size: selectedSize,
   };
+
+  if (token == null) {
+    Cookies.set("redirectPath", `/Productpage/${id}`);
+    return navigate('/login');
+  } else {
+    axiosClient
+      .post('/order', newCartItem)
+      .then(({ data }) => {
+        axiosClient
+          .get('/userCart')
+          .then(({ data }) => {
+            setIncart(data.data);
+            setNotification("Product has been successfully added");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      })
+      .catch((error) => console.log(error));
+  }
+};
+
 
   return (
     <div>
@@ -124,38 +160,6 @@ export default function ProductDetails({ updateCartCount,product }) {
                   </span>
                 </h1>
               </div>
-              <div className="color-picker py-8 border-b-2">
-                <div className="color-picker__info flex items-center mb-4">
-                  <span className="color-picker__text uppercase fontbold text-sm">Color:</span> &nbsp;
-                  <div className="color-picker__label text-sm fontLight">Optic White</div>
-                </div>
-                <div className="color-picker__swatch--container flex">
-                  <div
-                    className="swatch w-8 h-8 bg-cover bg-center rounded-full"
-                    style={{ backgroundImage: `url(${jacke2})` }}
-                  >
-                    <Link className="rounded-full h-8 w-8">
-                      <span className="swatch__color"></span>
-                    </Link>
-                  </div>
-                  <div
-                    className="swatch w-8 h-8 bg-cover bg-center rounded-full"
-                    style={{ backgroundImage: `url(${jacket})` }}
-                  >
-                    <Link className="rounded-full h-8 w-8">
-                      <span className="swatch__color"></span>
-                    </Link>
-                  </div>
-                  <div
-                    className="swatch w-8 h-8 bg-cover bg-center rounded-full"
-                    style={{ backgroundImage: `url(${pyjamas})` }}
-                  >
-                    <Link className="rounded-full h-8 w-8">
-                      <span className="swatch__color"></span>
-                    </Link>
-                  </div>
-                </div>
-              </div>
               <div className="product-dimensions border-b-2 py-10">
                 <div className="product-dimensions-header">
                   <h2 className="product-dimensions__header-title fontbold">
@@ -194,7 +198,7 @@ export default function ProductDetails({ updateCartCount,product }) {
 
                   {
                     notification && (
-                        <div className="w-[300px] py-2 px-3 text-white rounded bg-green-500 fixed right-4 bottom-4 z-50 animate-fade-in-down">
+                        <div className="w-[300px] py-2 px-3 text-white rounded bg-black fixed right-4 bottom-4 z-50 animate-fade-in-down">
                         {notification}
                     </div>)
                   }

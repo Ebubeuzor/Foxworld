@@ -88,7 +88,7 @@ class PaymentController extends Controller
         $payment = Flutterwave::initializePayment($data);
         
         if ($payment['status'] !== 'success') {
-            return response()->json(['message' => $data], $totalAmount);
+            return response()->json(['message' => $data]);
         }
 
         

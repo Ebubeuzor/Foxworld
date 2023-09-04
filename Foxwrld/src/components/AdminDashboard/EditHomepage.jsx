@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import ImageUpload from "../../assets/ImageUpload.png";
 import Button from "../Button";
 import axiosClient from "../../axoisClient";
@@ -12,7 +12,7 @@ export default function EditHomepage() {
   const [Section1Title, setSection1Title] = useState("");
   const [error, setError] = useState({__html: ""});
   
-  const {notification,setNotification,token,setToken,setUser} = useStateContext();
+  const {notification,setNotification,token,setToken,setUser,user} = useStateContext();
   const [categories, setCategories] = useState([]);
   const [Section2aCategory, setSection2aCategory] = useState(null);
   const [Section2bCategory, setSection2bCategory] = useState(null);
@@ -28,6 +28,10 @@ export default function EditHomepage() {
     return <Navigate to="/Login"/>
   }
   
+  if (user.admin == null) {
+    return <Navigate to="/"/>
+  }
+
   const logOut = (ev) => {
     ev.preventDefault();
     
@@ -72,6 +76,18 @@ export default function EditHomepage() {
 
     })
   };
+
+  
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+
+  useEffect(() => {
+    userData()
+  }, []);
 
   const handleCategorySelect2a = (event) => {
     const selectedCategory = event.target.value;

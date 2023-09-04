@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import coats from "../../assets/coats.jpeg";
 import Pagination from "../Navigation/Pagination";
 import Button from "../Button";
@@ -10,7 +10,7 @@ export default function Products() {
   const [loading,setLoading] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedDataCheck, setSelectedDataCheck] = useState(false);
-  const {notification,setNotification,token,setToken,setUser} = useStateContext();
+  const {notification,setNotification,token,setToken,setUser,user} = useStateContext();
   const [meta,setMeta] = useState({});
   const [categories, setCategories] = useState([]);
   const [products,setProducts] = useState([]);
@@ -26,6 +26,22 @@ export default function Products() {
   if(!token){
     return <Navigate to="/Login"/>
   }
+  
+  
+  if (user.admin == null) {
+    return <Navigate to="/"/>
+  }
+  
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+
+  useEffect(() => {
+    userData()
+  }, []);
   
   const logOut = (ev) => {
     ev.preventDefault();
@@ -281,7 +297,7 @@ export default function Products() {
                   <option>Filter by Product Type</option>
                   {
                     categories.map((category) => (
-                      <option>{category.categories}</option>
+                      <option key={category.id} >{category.categories}</option>
                     ))
                   }
                   

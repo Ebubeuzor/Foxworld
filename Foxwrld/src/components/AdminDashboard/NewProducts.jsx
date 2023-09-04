@@ -8,7 +8,7 @@ export default function Layout() {
 
   const {id} = useParams();
   const categoryRef = useRef();
-  const {notification,setNotification,token,setToken,setUser} = useStateContext();
+  const {notification,setNotification,token,setToken,setUser,user} = useStateContext();
   const [showSchedule, setShowSchedule] = useState(false);
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -41,6 +41,23 @@ export default function Layout() {
   
   if(!token){
     return <Navigate to="/Login"/>
+  }
+  
+  
+  
+  const userData = () => {
+    axiosClient.get('/user')
+    .then(({data}) => {
+      setUser(data)
+    })
+  }
+  
+  useEffect(() => {
+    userData()
+  }, []);
+  
+  if (user.admin == null) {
+    return <Navigate to="/"/>
   }
   
   const logOut = (ev) => {

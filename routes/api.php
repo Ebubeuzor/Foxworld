@@ -49,24 +49,25 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/amountForDay', [PaymentController::class, 'amountForDay']);
     Route::post('/selectedDay', [PaymentController::class, 'selectedDay']);
 
-    Route::apiResource('/products', ProductController::class);
-    Route::get('/male', [ProductController::class, 'genderMale']);
-    Route::get('/female', [ProductController::class, 'genderFeMale']);
-    Route::get('/children', [ProductController::class, 'genderChildren']);
-    
-    Route::get('/maleRandom', [ProductController::class, 'genderMaleRandom']);
-    Route::get('/femaleRandom', [ProductController::class, 'genderFeMaleRandom']);
-    Route::get('/childrenRandom', [ProductController::class, 'genderChildrenRandom']);
-    
     Route::get('/userCart', [OrderController::class, 'userCart']);
     Route::apiResource('/category', CategoryController::class);
-    Route::apiResource('/homepage', HomepageController::class);
     Route::apiResource('/order', OrderController::class);
     Route::apiResource('/mainorder', MainOrderController::class);
-    Route::apiResource('/menu', MenuController::class);
     
 });
 
+Route::apiResource('/products', ProductController::class);
+Route::get('/male', [ProductController::class, 'genderMale']);
+Route::get('/female', [ProductController::class, 'genderFeMale']);
+Route::get('/children', [ProductController::class, 'genderChildren']);
+
+
+Route::get('/maleRandom', [ProductController::class, 'genderMaleRandom']);
+Route::get('/femaleRandom', [ProductController::class, 'genderFeMaleRandom']);
+Route::get('/childrenRandom', [ProductController::class, 'genderChildrenRandom']);
+
+Route::apiResource('/menu', MenuController::class);
+Route::apiResource('/homepage', HomepageController::class);
 Route::get('/view-count', function () {
     $viewCountCookie = Cookie::get('view_count');
 

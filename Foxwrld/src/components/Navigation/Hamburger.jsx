@@ -10,7 +10,7 @@ const HamburgerMenu = ({ color, cartCount }) => {
   const [currentMenu, setCurrentMenu] = useState("main");
   const [editContent, setEditContent] = useState([]);
   const [title, setTitle] = useState("");
-  const {setUser,setToken,user} = useStateContext();
+  const {setUser,setToken,user,token} = useStateContext();
   
 const logOut = (ev) => {
   ev.preventDefault();
@@ -94,6 +94,20 @@ useEffect(() => {
                 <span className="cursor-pointer">{menu.title}</span>
               </li>
             ))}
+              <div>
+              <Link>
+
+              
+  {token && <Link onClick={logOut}>
+    <button className={`text-black}`}>
+      Logout
+    </button>
+  </Link>}
+  
+
+
+              </Link>
+          </div>
           </ul>
         );
         default:
@@ -184,20 +198,7 @@ useEffect(() => {
             </svg>
           </Link>
         </div>
-        <div>
-              <Link>
-
-              
-  <Link onClick={logOut}>
-    <button className={`text-${color}`}>
-      Logout
-    </button>
-  </Link>
-  
-
-
-              </Link>
-          </div>
+      
   {user.admin === "Admin" &&
               <Link to="/Order" className=" text-white">
                 Admin

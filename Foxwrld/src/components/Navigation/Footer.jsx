@@ -83,7 +83,7 @@ export default function Footer() {
             </div>
           </section>
         </div>
-        <div className="mx-20  flex mt-11 pt-10 flex-wrap ">
+        <div className="mx-20  flex mt-11 pt-10 flex-wrap justify-center">
           <div className="m-3 justify-center">
          <p className="text-sm"> Copyright © 2023 FOXWRLD.COM</p>
           </div>

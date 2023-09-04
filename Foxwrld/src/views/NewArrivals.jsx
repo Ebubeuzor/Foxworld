@@ -95,7 +95,6 @@ export default function NewArrivals() {
                     image={product.image[0].image}
                     alternateImage={product.alternateImage}
                     title={product.title}
-                    color={product.color}
                     category={
                       product.categories.length > 0
                         ? product.categories[0].categories
