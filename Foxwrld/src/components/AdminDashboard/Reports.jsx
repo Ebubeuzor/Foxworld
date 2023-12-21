@@ -104,7 +104,7 @@ export default function Reports() {
   useEffect(() => {
     axiosClient.get('/payment')
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       setAmount(data.data)
     })
   },[])
@@ -112,13 +112,13 @@ export default function Reports() {
   useEffect(() => {
     axiosClient.get('/amountForDay')
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       setAmountForDay(data.data)
     })
   },[])
 
   const getOrders = (url) => {
-    url = url || '/mainorder'
+    url = url || '/mainorderreport'
     setLoading(true)
     axiosClient.get(url)
     .then(({data}) => {
@@ -129,7 +129,7 @@ export default function Reports() {
 
       const usernameCounts = {};
       fetchedOrders.forEach(order => {
-        console.log(order);
+        // console.log(order);
         if (order.user != null) {
         const userName = order.user.name;
         if (!usernameCounts[userName]) {
@@ -188,7 +188,7 @@ export default function Reports() {
   let calAmountForDay = 0
   amountForDay.map(item => calAmountForDay += parseInt(item.totalAmount))
 
-  console.log(amount);
+  // console.log(amount);
   return (
     <div className="flex">
      <div className="sidebar bg-gray-200 w-1/4 border border-gray-300 h-[100vh]">
@@ -207,6 +207,13 @@ export default function Reports() {
                 <div>MenuEditor</div>
               </Link>
             </div>
+            <li>
+            <div className="p-4  hover:bg-slate-300 border-b">
+              <Link to="/ColorPalette" className="text-black ">
+                <div>ColorPalette</div>
+              </Link>
+            </div>
+          </li>
             <div className="p-4 bg-slate-400 border-b  ">
               <Link to="/Reports" className="text-black  ">
                 <div>Analysis</div>

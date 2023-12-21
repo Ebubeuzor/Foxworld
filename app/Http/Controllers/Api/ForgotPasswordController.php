@@ -26,7 +26,6 @@ class ForgotPasswordController extends Controller
     }
 
 
-
     public function returnView(){
         return view('emails.password-reset');
     }

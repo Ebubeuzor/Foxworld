@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\Product::class, 'product_id');
+            $table->foreignIdFor(\App\Models\Color::class, 'color_id');
             $table->foreignIdFor(\App\Models\User::class, 'user_id');
             $table->string('size');
             $table->integer('paidStatus')->default(0);

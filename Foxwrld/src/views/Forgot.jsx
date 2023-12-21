@@ -17,10 +17,10 @@ export default function Forgot() {
     const data = {
       email : emailRef.current.value
     }
-    console.log(data);
+    // console.log(data);
     axiosClient.post("/password/reset",data)
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       navigate('/Verify');
     })
     .catch((error) => {

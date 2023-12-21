@@ -101,7 +101,7 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
   const getMenu = () => {
     axiosClient.get('/menu')
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
   
         const transformedData = data.data.map(menuItem => ({
           id: menuItem.id,
@@ -117,7 +117,7 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
           }))
         }));
   
-        console.log("Transformed Data:", transformedData);
+        // console.log("Transformed Data:", transformedData);
         setEditContent(transformedData);
       })
       .catch((e) => console.error(e));
@@ -151,7 +151,7 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
       axiosClient.get(`/menu/${id}`)
         .then(({ data }) => {
           setEditValues(data);  // Set editValues to the data object, not JSON.stringify(data)
-          console.log("Saved values " + JSON.stringify(data));
+          // console.log("Saved values " + JSON.stringify(data));
           setTimeout(() => {
             setLoadingEditValues(false);
           }, 2000);
@@ -203,7 +203,7 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
   };
 
   const openCreateModal = () => {
-    console.log("Open create modal clicked");
+    // console.log("Open create modal clicked");
     setShowCreateModal(true);
   };
 
@@ -230,7 +230,7 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
     };
 
     // Log the form data to the console
-    console.log("New Menu Data:", newMenuData);
+    // console.log("New Menu Data:", newMenuData);
 
     axiosClient.post('/menu',newMenuData)
     .then(({data}) => {
@@ -297,9 +297,9 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
-  console.log("Edit Content:", editContent);
+  // console.log("Edit Content:", editContent);
   
-  console.log("editValues:", editValues);
+  // console.log("editValues:", editValues);
 
 
 
@@ -369,6 +369,13 @@ const [loadingEditValues, setLoadingEditValues] = useState(true);
               </Link>
             </div>
           </li> */}
+            <li>
+            <div className="p-4  hover:bg-slate-300 border-b">
+              <Link to="/ColorPalette" className="text-black ">
+                <div>ColorPalette</div>
+              </Link>
+            </div>
+          </li>
           <li>
             <div className="p-4  hover:bg-slate-300 border-b">
               <Link to="/Products" className="text-black ">

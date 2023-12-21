@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaidResource;
+use App\Mail\UserBoughtItem;
 use App\Models\MainOrder;
 use App\Models\MyTotalIncome;
 use App\Models\Order;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use KingFlamez\Rave\Facades\Rave as Flutterwave;
 class PaymentController extends Controller
 {
@@ -117,8 +120,12 @@ class PaymentController extends Controller
         $data = Flutterwave::verifyTransaction($transactionID);
 
         $allId = $_COOKIE['cartIds'];
+        $userid = $_COOKIE['userid'];
 
         $cartIds = json_decode($allId, true);
+        $usercookiedata = json_decode($userid, true);
+
+        $user = User::where('id', $usercookiedata["user"])->first();
 
         $amount = $data['data']['amount'];
         $id = $data['data']['id'];
@@ -153,6 +160,7 @@ class PaymentController extends Controller
                 ["totalAmount" => $amount,
                 "purchase_date" => now()->toDateString(),]
             );
+            Mail::to('ebubeuzor17@gmail.com')->send(new UserBoughtItem($user));
             return redirect()->route('successPage');
         } elseif ($status == 'cancelled') {
             return redirect()->route('failedPage');

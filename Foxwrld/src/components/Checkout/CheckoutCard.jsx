@@ -8,7 +8,7 @@ export default function CheckoutCard({products}) {
   const deleteFromCart = (id) => {
     axiosClient.delete(`/order/${id}`)
     .then(()=>{
-      setNotification("Product has been successfully removed from your database")
+      setNotification("Product has been successfully removed from your cart")
         axiosClient.get('/userCart')
         .then(({data}) => {
           setIncart(data.data)

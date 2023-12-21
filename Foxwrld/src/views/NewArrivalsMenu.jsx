@@ -80,7 +80,7 @@ export default function NewArrivalsMenu() {
           </div>
         </div>
         <div>
-          <div className="flex flex-wrap justify-center">
+          <div className="md:flex md:flex-wrap justify-center">
           {loading ? (
               <SkeletonLoader count={3} /> // Adjust the count as needed
             ) : (

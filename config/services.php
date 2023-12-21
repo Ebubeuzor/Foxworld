@@ -37,10 +37,5 @@ return [
         'redirect' => 'http://127.0.0.1:5173/auth/google',
     ],
 
-    'flutterwave' => [
-        'key' => 'FLWPUBK_TEST-8cad7a5e065dea34fc34687d2e04f585-X',
-        'secret' => 'FLWSECK_TEST-23d0c4ff52455968094e5e2214ebb392-X',
-        'environment' => 'FLWSECK_TEST050630a918d1',
-    ],
 
 ];

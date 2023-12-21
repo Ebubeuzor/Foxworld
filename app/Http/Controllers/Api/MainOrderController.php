@@ -14,7 +14,9 @@ class MainOrderController extends Controller
     public function index()
     {
         return MainOrderResource::collection(
-            MainOrder::paginate(6)
+            MainOrder::where('transaction', '!=', null)
+            ->orderBy('created_at', 'desc')
+            ->paginate(6)
         );
     }
     

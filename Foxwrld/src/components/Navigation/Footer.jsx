@@ -7,7 +7,7 @@ export default function Footer() {
     <div >
     
       <div className=" py-10 absolute left-0 right-0  border-t-2 mt-2" >
-        <div className="flex mx-20 flex-wrap ">
+        <div className="flex mx-5 flex-wrap ">
           <section className="  flex-grow m-3">
             <div className="">
               <h3 className="text-[12px] uppercase fontbold ">Shop By Category
@@ -68,11 +68,11 @@ export default function Footer() {
               
                 <li>
                   <Link className="text-[11px] fontThin "><strong className="block">Telephone </strong>
-                  +2349068722889</Link>
+                  +2348121272832</Link>
                 </li>
                 <li>
                   <Link className="text-[11px] fontThin "><strong className="block">Address </strong>
-                  123 Busco Street, Lagos.</Link>
+                  9, Rafiat Ayinke Tinubu Close, off T. F. Kuboye Street, Maroko, Oniru, Lagos.</Link>
                 </li>
                 <li>
                   <Link className="text-[11px] fontThin "><strong className="block">Business Hours </strong>

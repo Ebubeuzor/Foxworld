@@ -17,8 +17,10 @@ export default function EditHomepage() {
   const [Section2aCategory, setSection2aCategory] = useState(null);
   const [Section2bCategory, setSection2bCategory] = useState(null);
   const [Section1Image, setSection1Image] = useState(null);
+  const [homepageImage, setHomepageImage] = useState(null);
   const [Section2aImage, setSection2aImage] = useState(null);
   const [Section2bImage, setSection2bImage] = useState(null);
+  const [homepageImage_Url, setHomepageImage_Url] = useState(null);
   const [Section1Image_Url, setSection1Image_Url] = useState(null);
   const [Section2aImage_Url, setSection2aImage_Url] = useState(null);
   const [Section2bImage_Url, setSection2bImage_Url] = useState(null);
@@ -53,7 +55,7 @@ export default function EditHomepage() {
 
     axiosClient.post('/homepage',formData)
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       setNotification("Your homepage has been modified");
     })
     .catch((error) => {
@@ -122,7 +124,7 @@ export default function EditHomepage() {
 
     axiosClient.post('/homepage',formData)
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       setNotification("Your homepage has been modified");
     })
     .catch((error) => {
@@ -142,7 +144,7 @@ export default function EditHomepage() {
 
     axiosClient.post('/homepage',formData)
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       setNotification("Your homepage has been modified");
     })
     .catch((error) => {
@@ -162,7 +164,7 @@ export default function EditHomepage() {
 
     axiosClient.post('/homepage',formData)
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       setNotification("Your homepage has been modified");
     })
     .catch((error) => {
@@ -200,6 +202,40 @@ export default function EditHomepage() {
     }
     reader.readAsDataURL(file);
   };
+
+  const handleHomepageImage = (event) => {
+    const file = event.target.files[0];
+    
+    const reader = new FileReader();
+    reader.onload = () =>{
+      setHomepageImage(file);
+      setHomepageImage_Url(reader.result)
+
+      event.target.value = '';
+    }
+    reader.readAsDataURL(file);
+  };
+
+  
+  const handleHomepageImageSubmit = (event) => {
+    event.preventDefault();
+    const formData = {
+      "homeImage" : homepageImage,
+      homepageImage_Url
+    };
+    
+    formData.homeImage = formData.homepageImage_Url;
+
+    axiosClient.post('/homepage',formData)
+    .then(({data}) => {
+      // console.log(data);
+      setNotification("Your homepage has been modified");
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  };
+
 
   const handleImageUpload2 = (event) => {
     const file = event.target.files[0];
@@ -263,6 +299,13 @@ export default function EditHomepage() {
             <div className="p-4  hover:bg-slate-300 border-b">
               <Link to="/Products" className="text-black ">
                 <div>Products</div>
+              </Link>
+            </div>
+          </li>
+          <li>
+            <div className="p-4  hover:bg-slate-300 border-b">
+              <Link to="/ColorPalette" className="text-black ">
+                <div>ColorPalette</div>
               </Link>
             </div>
           </li>
@@ -347,6 +390,41 @@ export default function EditHomepage() {
 <Button text="Submit Video"/>
              
             </div>
+          </form>
+          <form onSubmit={handleHomepageImageSubmit} className="mb-20">
+            <section className="in-page__cell bg-slate-200 rounded-lg shadow-lg p-4">
+              <h1 className="fontBold">Section Pictures</h1>
+           
+              <div className="my-4">
+                <label htmlFor="imageUpload2" className="font-bold block">
+                  <div className="bg-white border border-gray-300 p-2 mt-2  text-center">
+                    {!homepageImage && (
+                      <span className="text-slate-500 font-bold text-sm">
+                      Upload an image{" "}
+                        <img src={ImageUpload} className="w-32 m-auto" alt="" />
+                      </span>
+                    )}
+
+                    {homepageImage && (
+                      <img
+                        src={homepageImage_Url}
+                        className="w-32"
+                        alt="Uploaded"
+                      />
+                    )}
+                  </div>
+                </label>
+                <input
+                  type="file"
+                  id="imageUpload2"
+                  accept="image/*"
+                  onChange={(event) => handleHomepageImage(event)}
+                  className="hidden"
+                />
+
+               <Button text="Submit Picutre  "/>
+              </div>
+            </section>
           </form>
 
           {/* Title and image */}

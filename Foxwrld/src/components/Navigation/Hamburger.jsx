@@ -10,7 +10,7 @@ const HamburgerMenu = ({ color, cartCount }) => {
   const [currentMenu, setCurrentMenu] = useState("main");
   const [editContent, setEditContent] = useState([]);
   const [title, setTitle] = useState("");
-  const {setUser,setToken,user,token} = useStateContext();
+  const {setUser,inCart, setInCart,setToken,user,token} = useStateContext();
   
 const logOut = (ev) => {
   ev.preventDefault();
@@ -22,6 +22,15 @@ const logOut = (ev) => {
     location.reload();
   });
 }
+
+useEffect(() => {
+  axiosClient.get('/userCart')
+  .then(({data}) => {
+    setInCart(data.data)
+  }).catch((e) => {
+    console.log(e);
+  })
+},[])
 
 const userData = () => {
   axiosClient.get('/user')
@@ -219,9 +228,9 @@ useEffect(() => {
                 d="M20.9999 8.99h-18v12h18v-12ZM15.97 8.97v-2a4.0002 4.0002 0 0 0-4-4 4 4 0 0 0-4 4v2"
               ></path>
             </svg>
-            {cartCount > 0 && (
-              <span className="absolute bottom-4 -right-1  text-center p-2 h-4 w-4 rounded-full fontBold text-xs px-1 py-0.5">
-                {cartCount}
+            {inCart.length > 0 && (
+              <span className={`absolute bottom-4 -right-1 text-${color}  text-center p-2 h-4 w-4 rounded-full fontBold text-xs px-1 py-0.5`}>
+                {inCart.length}
               </span>
             )}
           </Link>

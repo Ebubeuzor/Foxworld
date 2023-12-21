@@ -25,7 +25,8 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'size' => 'required',
-            'product_id' => 'required'
+            'product_id' => 'required',
+            'color_id' => 'required'
         ];
     }
 }

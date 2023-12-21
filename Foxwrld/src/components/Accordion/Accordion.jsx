@@ -37,7 +37,7 @@ export default function Accordion({ onFilteredData }) {
           setSelectedDataCheck(true);
           setSelectedProduct(data.data);
           setMeta(data.meta);
-          console.log(data.data);
+          // console.log(data.data);
 
           onFilteredData(data.data);
         }

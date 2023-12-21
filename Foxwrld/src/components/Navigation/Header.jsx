@@ -36,6 +36,10 @@ export default function Header({ color, cartCount }) {
   useEffect(() => {
     userData()
   }, []);
+  const removeFromCart = (productId) => {
+    // Implement your logic to remove the product from the cart
+    // Update the cartProducts state accordingly
+  };
 
   const getMenu = () => {
     setLoading(true)
@@ -323,48 +327,72 @@ const logOut = (ev) => {
             </li>
           }
           <li className="relative">
-          <a
-  href="#"
-  className="px-4 sm:px-8 py-6 relative"
-  onClick={handleCartDropdownToggle}
->
-  <svg
-    role="img"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      fill="none"
-      stroke={color}
-      d="M20.9999 8.99h-18v12h18v-12ZM15.97 8.97v-2a4.0002 4.0002 0 0 0-4-4 4 4 0 0 0-4 4v2"
-    ></path>
-  </svg>
-  {inCart.length > 0 && (
-    <span className="absolute bottom-8 -right-1 z-40 text-center p-2 h-4 w-4 rounded-full fontBold text-xs px-1 py-0.5">
-      {inCart.length}
-    </span>
+          {token &&
+            <a
+            href="#"
+            className="px-4 sm:px-8 py-6 relative"
+            onClick={handleCartDropdownToggle}
+          >
+            <svg
+              role="img"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                fill="none"
+                stroke={color}
+                d="M20.9999 8.99h-18v12h18v-12ZM15.97 8.97v-2a4.0002 4.0002 0 0 0-4-4 4 4 0 0 0-4 4v2"
+              ></path>
+            </svg>
+            {inCart.length > 0 && (
+            <span className={`absolute bottom-8 -right-1 z-40 text-center p-2 h-4 w-4 rounded-full fontBold text-xs px-1 py-0.5 text-${color}`}>
+            {inCart.length}
+          </span>
+
   )}
     {isCartDropdownOpen && (
                 <div
-                  className="absolute top-full right-0 bg-white mt-2 p-2"
+                  className="absolute top-full right-0  bg-white mt-2 p-2"
                   onMouseLeave={handleCartDropdownClose}
                 >
                   {
-                    loading && (<div className="flex justify-center items-center mt-10">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm12 0a8 8 0 100-16v3a5 5 0 010 10v3a8 8 0 000 16 4 4 0 110-8 4 4 0 004-4v-3a5 5 0 010-10v-3z"></path>
-                    </svg>
-                    <span>Loading...</span>
+                    loading && (<div className=" flex justify-center mx-autorounded-lg w-32 p-3   items-center ">
+                          <svg
+  class="containe"
+  viewBox="0 0 40 40"
+  height="20"
+  width="20"
+>
+  <circle 
+    class="track"
+    cx="20" 
+    cy="20" 
+    r="17.5" 
+    pathlength="100" 
+    stroke-width="5px" 
+    fill="none" 
+  />
+  <circle 
+    class="car"
+    cx="20" 
+    cy="20" 
+    r="17.5" 
+    pathlength="100" 
+    stroke-width="5px" 
+    fill="none" 
+  />
+</svg>
+
+                    
                   </div>)
                   }
-                  {!loading && inCart && <CartProducts product={inCart}/>}
+                  {!loading && inCart && <CartProducts product={inCart}  removeFromCart={removeFromCart}/>}
                 </div>
               )}
 </a>
-
+}
           </li>
         </ul>
       </div>

@@ -35,13 +35,13 @@ export default function AccountSettings() {
       date_of_birth :dobRef.current.value
     }
 
-    console.log(payload);
+    // console.log(payload);
 
     axiosClient.put(`/user/${user.id}`, payload)
     .then(({data})=>{
       userData()
       setNotification("Your details has been updated")
-      console.log(data);
+      // console.log(data);
     })
     .catch((error) => {
       

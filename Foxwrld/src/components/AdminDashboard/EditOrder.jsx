@@ -4,6 +4,7 @@ import coats from "../../assets/coats.jpeg";
 import Button from "../Button";
 import axiosClient from "../../axoisClient";
 import { useStateContext } from "../../context/ContextProvider";
+import ImageModal from "../ImageModal";
 
 export default function Layout() {
   const [loading,setLoading] = useState(false);
@@ -11,6 +12,8 @@ export default function Layout() {
   const [status, setStatus] = useState("Processing");
   const [selectAll, setSelectAll] = useState(false);
   const [data, setData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const {id} = useParams();
 
@@ -110,6 +113,18 @@ export default function Layout() {
       checkbox.checked = checked;
     });
   };
+
+  const openModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setShowModal(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setSelectedImage(null);
+    setShowModal(false);
+  };
+
 
   return (
     <div className="flex">
@@ -268,7 +283,18 @@ export default function Layout() {
               <strong className="fontBold">Email:</strong>
               <div className="">{data && data.user.email}</div>
             </div>
+            <div className="mb-2">
+              <strong className="fontBold">Size:</strong>
+              <div className="">{data && data.order.size}</div>
+            </div>
+
+            <div className="mb-2">
+              <strong className="fontBold">Color:</strong>
+              <div className="">{data && data.order.color_id.color}</div>
+            </div>
           </div>
+
+          
           <table className="w-full border border-gray-300 mt-4">
             <thead>
               <tr>
@@ -283,12 +309,16 @@ export default function Layout() {
             <tbody className="p-5 ">
               <tr className="p-5">
                 <td className="text-center">
-                  <img
-                    src={data && data.order.product_id.frontImage}
-                    alt="Product"
-                    className="w-16 h-16 mx-auto my-3"
-                  />
-                </td>
+              {/* Add onClick to open the modal */}
+              <img
+                src={data && data.order.product_id.frontImage}
+                alt="Product"
+                className="w-16 h-16 mx-auto my-3 cursor-pointer"
+                onClick={() =>
+                  openModal(data && data.order.product_id.frontImage)
+                }
+              />
+            </td>
 
                 <td className="text-center">
                   <Link to="/">{data && data.order.product_id.title}</Link>
@@ -323,6 +353,9 @@ export default function Layout() {
             {notification}
         </div>)
       }
+       {showModal && (
+        <ImageModal imageUrl={selectedImage} onClose={closeModal} />
+      )}
     </div>
   );
 }

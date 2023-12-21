@@ -20,6 +20,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'size' => $this->size,
             'product_id' => new ProductResource($this->product),
+            'color_id' => new ColorResource($this->color),
             'user_id' => $this->user,
         ];
     }

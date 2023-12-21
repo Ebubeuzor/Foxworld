@@ -29,6 +29,7 @@ class UpdateProductRequest extends FormRequest
             'images' => 'array',
             'sizes' => 'array',
             'categories' => 'array',
+            'colors' => 'array',
             'gender' => 'required',
             'title' => 'required',
             'stock' => 'required',

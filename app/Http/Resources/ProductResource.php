@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
             'stock' => $this->stock,
             'size' => SizeResource::collection($this->sizes),
             'categories' => CategoryResource::collection($this->categories),
+            'colors' => ColorResource::collection($this->colors),
             'details' => $this->details,
             'stock' => $this->stock,
             'price' => $this->price,

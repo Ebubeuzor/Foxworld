@@ -68,7 +68,7 @@ export default function Products() {
   const getMenu = () => {
     axiosClient.get('/menu')
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
 
         const transformedData = data.data.map(menuItem => ({
           title: menuItem.Title,
@@ -83,7 +83,7 @@ export default function Products() {
           }))
         }));
 
-        console.log("Transformed Data:", transformedData);
+        // console.log("Transformed Data:", transformedData);
         setEditContent(transformedData);
       })
       .catch((e) => console.error(e));
@@ -99,7 +99,7 @@ export default function Products() {
     url = url || '/products'
     axiosClient.get(url)
     .then(({data}) => {
-      console.log(data.data);
+      // console.log(data.data);
       setMeta(data.meta);
       setProducts(data.data);
       setLoading(false)
@@ -110,7 +110,7 @@ export default function Products() {
   const getCategory = () => {
     axiosClient.get('/category')
     .then(({data}) => {
-      console.log(data.data);
+      // console.log(data.data);
       setCategories(data.data)
     });
   }
@@ -147,11 +147,11 @@ export default function Products() {
       productMenu: selectedMenu,
     };
 
-    console.log("Selected Values:", selectedValues);
+    // console.log("Selected Values:", selectedValues);
 
     axiosClient.post('/rearrange',selectedValues)
     .then(({data}) => {
-      console.log(data);
+      // console.log(data);
       setSelectedData(data.data);
       setSelectedDataCheck(true);
     })
@@ -176,6 +176,13 @@ export default function Products() {
                 <div>MenuEditor</div>
               </Link>
             </div>
+            <li>
+            <div className="p-4  hover:bg-slate-300 border-b">
+              <Link to="/ColorPalette" className="text-black ">
+                <div>ColorPalette</div>
+              </Link>
+            </div>
+          </li>
             <div className="p-4 hover:bg-slate-300 border-b  ">
               <Link to="/Reports" className="text-black  ">
                 <div>Analysis</div>

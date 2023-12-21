@@ -41,6 +41,7 @@ class OrderController extends Controller
         $order->size = $data['size']; 
         $order->user_id = $user->id; 
         $order->product_id = $data['product_id']; 
+        $order->color_id = $data['color_id']; 
 
         $order->save();
 

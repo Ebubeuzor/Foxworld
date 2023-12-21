@@ -82,11 +82,11 @@ export default function NewArrivals() {
           </div>
         </div>
         <div>
-        <div className="flex flex-wrap justify-center">
+        <div className=" md:flex flex-wrap justify-center">
         {/* {console.log("Number of products:", products.length)} */}
 
        {(loading || initialLoad) ? (
-       <SkeletonLoader count={initialLoad ? products.length : 3} />
+       <SkeletonLoader count={initialLoad ? products.length : 2} />
 
   ) : (  
               products.map((product) => (

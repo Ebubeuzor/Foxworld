@@ -25,6 +25,7 @@ class StoreHomepageRequest extends FormRequest
     {
         return [
             'homevideo' => 'nullable',
+            'homeImage' => 'nullable',
             'Section1Title' => 'nullable',
             'Section1Image' => 'nullable',
             'Section2aCategory' => 'nullable',

@@ -22,20 +22,20 @@ export default function ProductCard({
       return (
         <img
           src={alternateImage}
-          className="object-cover object-top md:w-[300px] md:h-[300px] md:object-cover w-full h-full mx-auto"
+          className="object-cover object-top md:w-[300px] md:h-[300px] md:object-cover w-72 h-72 mx-auto"
           alt={title}
         />
       );
     } else {
       // Render the default image
       return (
-        <img src={image} className=" object-cover object-top md:w-[300px] md:h-[300px] md:object-cover w-full h-full mx-auto" alt={title} />
+        <img src={image} className=" object-cover object-top md:w-[300px] md:h-[300px] md:object-cover w-72 h-72 mx-auto" alt={title} />
       );
     }
   };
 
   return (
-    <div className="product-card w-40 h-96 m-2  md:w-96  md:h-[500px]">
+    <div className="product-card w-full h-96 m-2  md:w-96  md:h-[500px]">
       <div
         className="product-image relative w-full  h-[65%] pb-square"
         onMouseEnter={handleMouseEnter}
@@ -45,7 +45,7 @@ export default function ProductCard({
           {renderImage()}
         </div>
       </div>
-      <div className="product-details text-center h-2/4 overflow-y-auto ">
+      <div className="product-details text-center mt-14 md:mt-5 overflow-y-auto ">
         <h2 className="product-title text-[12px] mb-1 fontbold ">{title}</h2>
         <p className="product-category text-slate-400 fontThin text-[11px] uppercase">{category}</p>
       </div>

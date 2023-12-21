@@ -55,13 +55,13 @@ export default function Account() {
       zipcode: zipcode.current.value,
     }
 
-    console.log(payload);
+    // console.log(payload);
 
     axiosClient.put(`/useraddress/${user.id}`, payload)
     .then(({data})=>{
       userData()
       setNotification("Your details has been updated")
-      console.log(data);
+      // console.log(data);
     })
     .catch((error) => {
       

@@ -8,6 +8,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Image;
 use App\Models\Size;
 use Carbon\Carbon;
@@ -38,7 +39,7 @@ class ProductController extends Controller
         $products = Product::select('products.*')
             ->join('category_product', 'products.id', '=', 'category_product.product_id')
             ->join('categories', 'category_product.category_id', '=', 'categories.id')
-            ->join('menus', 'categories.menu_id', '=', 'menus.id') // Join the menus table
+            ->join('menus', 'categories.menu_id', '=', 'menus.id') 
             ->where('categories.categories', '=', $data['category'])
             ->where('menus.Title', '=', $data['productMenu']) 
             ->where(function ($query) use ($data) {
@@ -83,7 +84,9 @@ class ProductController extends Controller
             ->join('categories', 'category_product.category_id', '=', 'categories.id')
             ->join('menus', 'categories.menu_id', '=', 'menus.id') // Join the menus table
             ->where('categories.categories', '=', $submenu)
-            ->where('menus.Title', '=', $menu);
+            ->where('menus.Title', '=', $menu)
+            ->distinct()
+            ;
 
         
         $products = $productsQuery->paginate(6);
@@ -273,6 +276,7 @@ class ProductController extends Controller
         $product->save();
 
         $images = $data['images'];
+        $colors = $data['colors'];
         $sizes = $data['sizes'];
         $categories = $data['categories'];
 
@@ -289,6 +293,11 @@ class ProductController extends Controller
         foreach ($categories as $category) {
             $categoryData = ['product_id' => $product->id,'category_id' => $category];
             $this->createProductCategory($categoryData);
+        }
+
+        foreach ($colors as $color) {
+            $colorData = ['product_id' => $product->id,'color_id' => $color];
+            $this->createProductColor($colorData);
         }
 
         return new ProductResource($product);
@@ -319,6 +328,27 @@ class ProductController extends Controller
 
         return Size::create($validator->validated());
 
+    }
+
+    public function createProductColor($data)
+    {
+        $validator = Validator::make($data, [
+            'color_id' => 'exists:App\Models\Color,id',
+            'product_id' => 'exists:App\Models\Product,id'
+        ]);
+
+        $validatedData = $validator->validated();
+
+        $product = Product::find($validatedData['product_id']);
+        $color = Color::find($validatedData['color_id']);
+
+        if (!$product || !$color) {
+            throw new \Exception('Product or Category not found');
+        }
+
+        $product->colors()->attach($color->id);
+
+        return true;
     }
 
     public function createProductCategory($data)
@@ -383,17 +413,21 @@ class ProductController extends Controller
             $this->updateCategories($product, $data['categories']);
         }
 
+        if (isset($data['colors'])) {
+            $this->updateColors($product, $data['colors']);
+        }
+
         if ($data['startDate'] > now()) {
             $product->visible = 1;
         }
         
         // Check if alternateImage and frontImage are provided, otherwise retain existing values
         if (isset($data['frontImage'])) {
-            $product->frontImage = $data['frontImage'];
+            $product->frontImage = $this->saveImage($data['frontImage']);
         }
 
         if (isset($data['alternateImage'])) {
-            $product->alternateImage = $data['alternateImage'];
+            $product->alternateImage = $this->saveImage($data['alternateImage']);
         }
 
         // Save the updated product with the possibly modified frontImage and alternateImage
@@ -436,6 +470,18 @@ class ProductController extends Controller
         foreach ($categories as $category) {
             $categoryData = ['product_id' => $product->id, 'category_id' => $category];
             $this->createProductCategory($categoryData);
+        }
+    }
+
+    private function updateColors(Product $product, array $colors)
+    {
+        // Detach all existing categories from the product
+        $product->colors()->detach();
+
+        // Attach new categories to the product
+        foreach ($colors as $color) {
+            $colorData = ['product_id' => $product->id, 'color_id' => $color];
+            $this->createProductColor($colorData);
         }
     }
 

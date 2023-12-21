@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ColorController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Api\HomepageController;
 use App\Http\Controllers\Api\MainOrderController;
@@ -10,7 +11,10 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Resources\MainOrderResource;
+use App\Models\MainOrder;
 use App\Models\Menu;
+use App\Models\User;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -26,6 +30,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
 
 Route::middleware('auth:sanctum')->group(function() {
     
@@ -50,9 +56,17 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/selectedDay', [PaymentController::class, 'selectedDay']);
 
     Route::get('/userCart', [OrderController::class, 'userCart']);
+    Route::get('/users', function(){
+        return User::all();
+    });
+    
+    Route::get('/mainorderreport', function(){
+        return MainOrderResource::collection( MainOrder::where('transaction', '!=', null)->get());
+    });
     Route::apiResource('/category', CategoryController::class);
     Route::apiResource('/order', OrderController::class);
     Route::apiResource('/mainorder', MainOrderController::class);
+    Route::apiResource('/colors', ColorController::class);
     
 });
 
@@ -112,7 +126,6 @@ Route::post('/visitor', function (Request $request) {
         return response()->json(['error' => 'An error occurred while fetching data.']);
     }
 });
-
 
 
 Route::post('/login', [AuthController::class, 'login']);

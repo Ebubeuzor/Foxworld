@@ -1,24 +1,23 @@
-import React from 'react'
-import ProductCard from './ProductCard'
-import jacket1 from '../../assets/jacket1.jpeg';
-import jacket2 from '../../assets/jacket2.jpeg';
+import React from 'react';
+import ProductCard from './ProductCard';
 
-export default function RecommendedProducts(product) {
-  console.log(product);
+export default function RecommendedProducts({ product }) {
+  // Check if product is an object and has a valid product array property
+  if (!product || !product.product || !Array.isArray(product.product) || product.product.length === 0) {
+    // If product.product is empty, you can show a default message or value
+    return <div className="text-center h-20 py-4">No recommended products available</div>;
+  }
+
   return (
     <div className='my-28'>
-        <div className='text-center p-10'>
-            <p className='uppercase fontBold '>We recommend</p>
-        </div>
-        <div className='flex   justify-center'>
+      <div className='text-center p-10'>
+        <p className='uppercase fontBold'>We recommend</p>
+      </div>
+      <div className='flex justify-center'>
         {product.product.map((p) => (
-          <ProductCard image={p.frontImage} alternateImage={p.alternateImage} title={p.title} color={"3"} />
-          
-        ))
-        }
-
-
-        </div>
+          <ProductCard key={p.id} image={p.frontImage} alternateImage={p.alternateImage} title={p.title} color={"3"} />
+        ))}
+      </div>
     </div>
-  )
+  );
 }

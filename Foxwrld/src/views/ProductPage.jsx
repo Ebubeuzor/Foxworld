@@ -21,7 +21,7 @@ export default function ProductPage() {
     axiosClient.get(`/products/${id}`)
       .then(({ data }) => {
         setProduct(data)
-        // console.log(data);
+        console.log(data);
         let url;
         if (data.gender == "male") {
           url = '/maleRandom';
@@ -60,11 +60,7 @@ export default function ProductPage() {
           product && <ProductDetails updateCartCount={updateCartCount} product={product} />
         )}
       </div>
-      {/* {loading ? (
-        <SkeletonProductDetails /> // Display skeleton loader for recommended products loading
-      ) : (
-        randomProducts && <RecommendedProducts product={randomProducts} />
-      )} */}
+   
       <Footer />
     </div>
   );

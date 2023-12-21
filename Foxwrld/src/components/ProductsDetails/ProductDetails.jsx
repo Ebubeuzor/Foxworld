@@ -17,11 +17,17 @@ import SkeletonProductDetails from "../SkeletonProductDetails";
 export default function ProductDetails({ updateCartCount,product }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
+  const [mainImage, setMainImage] = useState("");
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColorName, setSelectedColorName] = useState('');
+
   const {setNotification,notification,inCart,setIncart,token,setUser,user } = useStateContext();
   const navigate = useNavigate();
 
 
   const {id} = useParams();
+  
+const [colors, setColors] = useState([]);
   
   const userData = () => {
     axiosClient.get('/user')
@@ -37,7 +43,8 @@ export default function ProductDetails({ updateCartCount,product }) {
   useEffect(() => {
     axiosClient.get(`/products/${id}`)
       .then(({ data }) => {
-        // console.log("product page json", JSON.stringify(data));
+        console.log(data);
+        setColors(data.colors)
       })
       .catch((error) => {
         console.error("Error fetching product data:", error);
@@ -83,9 +90,14 @@ export default function ProductDetails({ updateCartCount,product }) {
     setNotification("Please select a size before adding to the cart");
     return; // Do not proceed further
   }
+  if (!selectedColor) {
+    setNotification("Please select a color before adding to the cart");
+    return; // Do not proceed further
+  }
 
   const newCartItem = {
     product_id: product.id,
+    color_id: selectedColor,
     size: selectedSize,
   };
 
@@ -110,6 +122,23 @@ export default function ProductDetails({ updateCartCount,product }) {
   }
 };
 
+const handleImageClick = (imageSrc) => {
+  // Set the clicked image as the main image
+  setMainImage(imageSrc);
+};
+const toggleColor = (color,colorname) => {
+  // If the clicked color is already selected, unselect it
+  if (selectedColor === color) {
+    setSelectedColor('');
+    setSelectedColorName('');
+  } else {
+    // If the clicked color is not selected, select it
+    setSelectedColor(color);
+    setSelectedColorName(colorname)
+  }
+};
+
+
 
   return (
     <div>
@@ -117,23 +146,43 @@ export default function ProductDetails({ updateCartCount,product }) {
       <div className="pt-36">
         <div className="product-details flex flex-wrap">
           <div className="w-full lg:w-2/4 h-full md:h-100vh relative justify-center slideshow">
-            <button
+            {/* <button
               className="prev-arrow absolute left-10 top-32 md:top-2/3"
               onClick={handlePrevSlide}
             >
-              <span className="text-3xl text-slate-300">&lt;</span>
+             <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35" viewBox="0 0 320 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg>
             </button>
             <button
               className="next-arrow absolute top-32 md:top-2/3 right-10"
               onClick={handleNextSlide}
             >
-              <span className="text-3xl text-slate-300">&gt;</span>
-            </button>
-              <img
-              src={images[activeIndex].src}
-              alt={images[activeIndex].alt}
-              className="product-image cursor-crosshair h-[50vh] md:h-[50vh] w-full object-contain"
-            />
+                           <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35"  viewBox="0 0 320 512"><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg>
+
+            </button> */}
+            {images && images.length > 0 ? (
+       <>
+       <img
+         src={mainImage || images[activeIndex].src}
+         alt={images[activeIndex].alt}
+         className="product-image cursor-crosshair h-[50vh] md:h-[50vh] w-full object-contain"
+       />
+       {/* Small images */}
+       <div className="small-images ml-4 flex flex-wrap justify-center mt-6 space-x-4">
+         {images.map((img, index) => (
+           <img
+             key={index}
+             src={img.src}
+             alt={`Small Image ${index}`}
+             className={`small-image cursor-pointer  w-28 h-28 object-cover border ${index === activeIndex ? 'border-black' : ''}`}
+             onClick={() => handleImageClick(img.src)}
+           />
+         ))}
+       </div>
+     </>
+        
+      ) : (
+        <p>No images available</p>
+      )}
           </div>
           <div className="w-full lg:w-2/4 details px-8">
             <div>
@@ -160,6 +209,41 @@ export default function ProductDetails({ updateCartCount,product }) {
                   </span>
                 </h1>
               </div>
+
+              <div className="color-picker py-8 border-b-2">
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px' }}>
+        <span style={{ textTransform: 'uppercase', fontWeight: 'bold', fontSize: '14px' }}>
+          Color:
+        </span>{" "}
+        &nbsp;
+        <div style={{ fontSize: '12px', fontStyle: 'light' }}>
+          {selectedColorName ? selectedColorName : "None"}
+        </div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {colors.map((color, index) => (
+          <div key={color.id} style={{ marginBottom: '4px' }} className="mr-5">
+            <div
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                marginRight: '8px',
+                backgroundColor: selectedColor === color ? 'black' : 'grey',
+              }}
+              onClick={() => toggleColor(color.id,color.color)}
+            >
+              <label style={{ width: '8px', height: '8px', borderRadius: '50%' }}></label>
+            </div>
+            <div style={{ fontSize: '12px', fontStyle: 'light', textAlign: 'center' }} className="mt-2">
+              {color.color}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
               <div className="product-dimensions border-b-2 py-10">
                 <div className="product-dimensions-header">
                   <h2 className="product-dimensions__header-title fontbold">

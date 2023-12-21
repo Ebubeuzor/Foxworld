@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('homepages', function (Blueprint $table) {
             $table->id();
             $table->longText('homevideo')->nullable();
+            $table->longText('homeImage')->nullable();
             $table->longText('Section1Title')->nullable();
             $table->longText('Section1Image')->nullable();
             $table->longText('Section2aCategory')->nullable();

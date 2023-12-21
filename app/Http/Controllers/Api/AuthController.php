@@ -83,18 +83,15 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
 
-        // Check if the user already exists based on the email
         $user = User::where('email', $socialiteUser->getEmail())->first();
 
         if (!$user) {
-            // If the user doesn't exist, create a new user with the Google details
             $user = User::create([
                 'name' => $socialiteUser->getName(),
                 'email' => $socialiteUser->getEmail(),
                 'google_id' => $socialiteUser->getId(),
             ]);
 
-            // Send welcome email to the user
             Mail::to($user->email)->send(new WelcomeEmail($user));
         }
 

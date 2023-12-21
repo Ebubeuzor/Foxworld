@@ -26,9 +26,10 @@ class StoreProductRequest extends FormRequest
         return [
             'frontImage' => 'required',
             'alternateImage' => 'required',
-            'images' => 'array',
+            'images' => 'array | min:1',
             'sizes' => 'array',
             'categories' => 'array',
+            'colors' => 'array',
             'gender' => 'required',
             'title' => 'required',
             'stock' => 'required',

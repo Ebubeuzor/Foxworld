@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -34,14 +35,30 @@ import NewArrivalsMenu from "./views/NewArrivalsMenu";
 import ConfirmPassword from "./views/ConfirmPassword";
 import Forgot from "./views/Forgot";
 import Verify from "./views/Verify";
+import ColorPalette from "./components/AdminDashboard/ColorPalette";
 
 // import "ionicons/dist/css/ionicons.min.css";
+
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  return null; // This component doesn't render anything in the DOM
+}
+
+
 
 function App() {
   return (
     <Router>
       <ContextProvider>
+        <ScrollToTop />
         <Routes>
+
           <Route path="/" element={<Homepage />} />
           <Route path="/Signup" element={<SignUp />} />
           <Route path="/NewArrivals/:id" element={<NewArrivals />} />
@@ -52,6 +69,7 @@ function App() {
           <Route path="/ProductPage/:id" element={<ProductPage />} />
           <Route path="/Checkout" element={<Checkout />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/ColorPalette" element={<ColorPalette />} />
           <Route path="/Account" element={<Account />} />
           <Route path="/AccountSettings" element={<AccountSettings />} />
           <Route path="/AccountAddress" element={<AccountAddress />} />

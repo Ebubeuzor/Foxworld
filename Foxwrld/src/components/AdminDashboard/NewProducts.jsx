@@ -20,10 +20,12 @@ export default function Layout() {
   const [alternateImage_Url, setAlternateImage_Url] = useState(null);
   const [sizes, setSizes] = useState([]);
   const [upsell, setUpsell] = useState("");
+  const [savedColors, setSavedColors] = useState([]);
   const [stock, setStock] = useState("");
   const [tag, setTag] = useState("");
   const [error, setError] = useState({__html: ""});
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedColor, setSelectedColor] = useState([]);
   const [getGender, setGetGender] = useState("");
 
   const [formData, setFormData] = useState({
@@ -51,6 +53,16 @@ export default function Layout() {
       setUser(data)
     })
   }
+
+  
+  const getColors = () => {
+    axiosClient.get('/colors')
+    .then(({data}) => {
+      setSavedColors(data.data);
+    }).catch(e => console.log(e))
+  }
+
+  useEffect(() => getColors(),[]);
   
   useEffect(() => {
     userData()
@@ -77,7 +89,7 @@ export default function Layout() {
         .then(({ data }) => {
           setFormData(data);
           setGetGender(data.gender);
-          console.log(data);
+          // console.log(data);
       // Assuming 'image' is an array of objects with 'image' property
       const imageUrls = data.image.map((imgObj) => imgObj.image);
       setImagesPre(imageUrls);
@@ -85,6 +97,9 @@ export default function Layout() {
       // Assuming 'categories' is an array of objects with 'categories' property
       const categoryNames = data.categories.map((catObj) => catObj.id);
       setSelectedCategory(categoryNames);
+      
+      const colorid = data.colors.map((col) => col.id);
+      setSelectedColor(colorid);
 
       // Assuming 'size' is an array of objects with 'sizes' property
       const sizesArray = data.size.map((sizeObj) => sizeObj.sizes);
@@ -130,7 +145,7 @@ export default function Layout() {
   const getCategory = () => {
     axiosClient.get('/category')
     .then(({data}) => {
-      console.log(data.data);
+      // console.log(data.data);
       setCategories(data.data)
     });
   }
@@ -158,6 +173,17 @@ export default function Layout() {
       setSelectedCategory([...selectedCategory, value]);
     } else {
       setSelectedCategory(selectedCategory.filter((category) => category !== value));
+    }
+  };
+  
+  
+  
+  const handleColorChange = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setSelectedColor([...selectedColor, value]);
+    } else {
+      setSelectedColor(selectedColor.filter((color) => color !== value));
     }
   };
   
@@ -203,6 +229,7 @@ export default function Layout() {
     const data = {
       ...formData,
       categories:selectedCategory,
+      colors:selectedColor,
       images,
       frontImage,
       frontImage_Url,
@@ -214,7 +241,7 @@ export default function Layout() {
 
     };
 
-    console.log("Submitted data:", data);
+    // console.log("Submitted data:", data);
 
 
     data.frontImage = data.frontImage_Url;
@@ -229,6 +256,7 @@ export default function Layout() {
       delete data.images;
       data.images = [];
     }
+
     let res;
     if (id) {
       res = axiosClient.put(`/products/${id}`, data)
@@ -351,6 +379,13 @@ export default function Layout() {
                 <div>MenuEditor</div>
               </Link>
             </div>
+            <li>
+            <div className="p-4  hover:bg-slate-300 border-b">
+              <Link to="/ColorPalette" className="text-black ">
+                <div>ColorPalette</div>
+              </Link>
+            </div>
+          </li>
             <div className="p-4 hover:bg-slate-300 border-b  ">
               <Link to="/Reports" className="text-black  ">
                 <div>Analysis</div>
@@ -641,7 +676,7 @@ export default function Layout() {
           <h2 className="border-b border-gray-300 py-4 fontBold text-2xl">
             Sizes
           </h2>
-          <div className="flex items-center border-b">
+          <div className="flex flex-wrap items-center border-b">
             <label className="mr-2 flex">
               <input
                 type="checkbox"
@@ -706,6 +741,39 @@ export default function Layout() {
               />
               <span className="ml-1">XS</span>
             </label>
+            <label className="mr-2 flex">
+              <input
+                type="checkbox"
+                value="XXL"
+                checked={sizes.includes("XXL")}
+                onChange={(event) => {
+                  const size = event.target.value;
+                  if (sizes.includes(size)) {
+                    setSizes(sizes.filter((s) => s !== size));
+                  } else {
+                    setSizes([...sizes, size]);
+                  }
+                }}
+              />
+              <span className="ml-1">XXL</span>
+            </label>
+            <label className="mr-2 flex">
+              <input
+                type="checkbox"
+                value="S"
+                checked={sizes.includes("S")}
+                onChange={(event) => {
+                  const size = event.target.value;
+                  if (sizes.includes(size)) {
+                    setSizes(sizes.filter((s) => s !== size));
+                  } else {
+                    setSizes([...sizes, size]);
+                  }
+                }}
+              />
+              <span className="ml-1">S</span>
+            </label>
+          
             <label className="mr-2 flex">
               <input
                 type="checkbox"
@@ -881,6 +949,38 @@ export default function Layout() {
         />
         <label> 
           {`${category.categories} -> ${category.menu} ${category.subMenu}` }
+        </label>
+      </div>
+    ))}
+
+
+
+         
+     
+        
+        </div>
+        </div>
+
+
+        <div className="border-b border-gray-300 p-4 fontBold">
+          <h2 className="border-b border-gray-300 py-4 fontBold text-2xl">
+            Product Colors
+          </h2>
+         <div className="p-2 overflow-scroll h-56"> 
+
+         <label htmlFor="selectedCategory" className="fontBold">
+      Select Color
+    </label>
+    {savedColors.map((color) => (
+      <div key={color.id}>
+        <input
+          type="checkbox"
+          defaultChecked={selectedColor.includes(color.id)}
+          onChange={handleColorChange}
+          value={color.id}
+        />
+        <label> 
+          {`${color.color}` }
         </label>
       </div>
     ))}

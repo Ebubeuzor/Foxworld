@@ -35,7 +35,7 @@ class HomepageController extends Controller
             $imageType = strtolower($matches[1]);
 
             // Check if file is an image
-            if (!in_array($imageType, ['jpg', 'jpeg', 'gif', 'png'])) {
+            if (!in_array($imageType, ['jpg', 'jpeg', 'gif','webp', 'png'])) {
                 throw new \Exception('Invalid image type');
             }
 
@@ -113,6 +113,10 @@ class HomepageController extends Controller
 
         if (isset($data['homevideo'])) {
             $attributes['homevideo'] = $this->saveVideo($data['homevideo']);
+        }
+
+        if (isset($data['homeImage'])) {
+            $attributes['homeImage'] = $this->saveImage($data['homeImage']);
         }
 
         if (isset($data['Section1Title'])) {

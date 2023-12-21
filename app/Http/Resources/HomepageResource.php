@@ -18,6 +18,7 @@ class HomepageResource extends JsonResource
         return [
             
             'homevideo' => $this->homevideo ? URL::to($this->homevideo) : null,
+            'homeImage' => $this->homeImage ? URL::to($this->homeImage) : null,
             'Section1Title' => $this->Section1Title,
             'Section1Image' => $this->Section1Image ? URL::to($this->Section1Image) : null,
             'Section2aCategory' => $this->Section2aCategory,
