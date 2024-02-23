@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import CartProducts from "../Cart/CartProducts";
+import newlogo2 from "../../assets/newlogo2.png";
+import newlogo1 from "../../assets/newlogo1.png";
+
 import { useStateContext } from "../../context/ContextProvider";
 import axiosClient from "../../axoisClient";
 
@@ -183,12 +186,12 @@ const logOut = (ev) => {
     ) : null}
     <div className="  hide px-8 absolute left-0 right-0 z-30">
       <div className="flex justify-between items-center relative w-full h-20 max-w-[256rem] ">
-        <Link
-          to="/"
-          className={`relative items-center text-${color} z-30 text-3xl font-sans font-extrabold`}
-        >
-          Foxwrld
-        </Link>
+      <Link
+            to="/"
+            className={`relative items-center text-${color} z-30 text-3xl font-sans font-extrabold`}
+          >
+            Foxwrld
+          </Link>
         <header className={`text-${color}`}>
             <ul className="flex">
               {editContent.map((menu, index) => (

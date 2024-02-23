@@ -115,7 +115,7 @@ class PaymentController extends Controller
     public function callback()
     {
         $status = request()->status;
-
+        
         $transactionID = Flutterwave::getTransactionIDFromCallback();
         $data = Flutterwave::verifyTransaction($transactionID);
 
@@ -134,7 +134,7 @@ class PaymentController extends Controller
             $mainOrder = MainOrder::where('order_id', $transactionReference)->first();
 
             if ($mainOrder) {
-                if ($status == 'completed') {
+                if ($status == 'completed' || $status == 'successful') {
 
                     $mainOrder->update([
                         'transaction' => $id,
@@ -153,7 +153,7 @@ class PaymentController extends Controller
             }
         }
 
-        if ($status == 'completed') {
+        if ($status == 'completed' || $status == 'successful') {
             $totalIncome = new MyTotalIncome();
             
             $totalIncome->create(

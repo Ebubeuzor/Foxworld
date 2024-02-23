@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Twirl as Hamburger } from "hamburger-react";
 import { Link } from "react-router-dom";
 import axiosClient from "../../axoisClient";
+import newlogo1 from "../../assets/newlogo1.png";
+import newlogo2 from "../../assets/newlogo2.png";
+import newlogo3 from "../../assets/newlogo3.png";
+import newlogo4 from "../../assets/newlogo4.png";
 import { useStateContext } from "../../context/ContextProvider";
 
 const HamburgerMenu = ({ color, cartCount }) => {
@@ -12,6 +16,9 @@ const HamburgerMenu = ({ color, cartCount }) => {
   const [title, setTitle] = useState("");
   const {setUser,inCart, setInCart,setToken,user,token} = useStateContext();
   
+
+  const [logoSource, setLogoSource] = useState(newlogo4); // State variable for logo source
+
 const logOut = (ev) => {
   ev.preventDefault();
   
@@ -76,6 +83,9 @@ useEffect(() => {
   }, []);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+
+    setLogoSource(isOpen ? newlogo4 : newlogo4);
+
   };
 
   const navigateToSubMenu = (menu) => {
